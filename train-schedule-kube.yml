@@ -1,24 +1,24 @@
-apiVersion: v1
 kind: Service
-metadata: 
-  name: train-schedule service
+apiVersion: v1
+metadata:
+  name: train-schedule-service
 spec:
   type: NodePort
-  selector: 
+  selector:
     app: train-schedule
   ports:
   - protocol: TCP
     port: 8080
     nodePort: 8080
 
-      
 ---
 
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: train-schedule
-  app: train-schedule
+  name: train-schedule-deployment
+  labels:
+    app: train-schedule
 spec:
   replicas: 2
   selector:
@@ -28,9 +28,9 @@ spec:
     metadata:
       labels:
         app: train-schedule
-    spec: 
-  containers:
-   - name: train-shedule
-     image: $DOCKER_IMAGE_NAME:$BUILD_NUMBER
-     ports: 
-     - containerPort: 8080
+    spec:
+      containers:
+      - name: train-schedule
+        image: $DOCKER_IMAGE_NAME:$BUILD_NUMBER
+        ports:
+        - containerPort: 8080
